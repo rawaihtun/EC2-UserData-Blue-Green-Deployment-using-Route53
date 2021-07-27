@@ -140,6 +140,7 @@ Change the DNS CNAME Record to V2 App.
         "Comment": "Update from AWS CLI to V1 APP"
     }
 }
+```
 
 Verify Change status: 
 ```
