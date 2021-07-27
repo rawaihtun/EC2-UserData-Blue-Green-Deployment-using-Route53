@@ -112,8 +112,8 @@ aws route53 change-resource-record-sets --generate-cli-skeleton
 }
 ```
 Modified output: 
--[app-v1.json](./Json/app-v1.json)<br>
--[app-v2.json](./Json/app-v2.json)
+- [app-v1.json](./Json/app-v1.json)<br>
+- [app-v2.json](./Json/app-v2.json)
 
 Change the DNS CNAME Record to V1 App. 
 ```
