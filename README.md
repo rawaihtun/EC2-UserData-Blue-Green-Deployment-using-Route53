@@ -13,7 +13,7 @@
 - Update CNAME record in route53 and point to EC2 web servers
 - Setup traffic Policies 
 - Update CNAME record with AWS CLI & json template 
-
+- Cleanup
 
 # Steps
 ## 1. Create VPC, routes tables, subnet tables and export outputs 
@@ -113,7 +113,8 @@ aws route53 change-resource-record-sets --generate-cli-skeleton
 ```
 Modified output: 
 - [app-v1.json](./Json/app-v1.json)<br>
-- [app-v2.json](./Json/app-v2.json)
+- [app-v2.json](./Json/app-v2.json)<br>
+- [delete-record.json](./Json/delete-record.json)
 
 Change the DNS CNAME Record to V1 App with AWS CLI 
 ```
@@ -152,4 +153,24 @@ aws route53 get-change --id /change/C00264061Z4N1L1SO8M2K
         "SubmittedAt": "2021-07-27T05:17:36.692000+00:00",
         "Comment": "Update from AWS CLI to V1 APP"
     }
+```
+
+## 8. Cleanup
+
+i) Remove DNS CNAME record 
+```
+aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K --change-batch file://../Json/delete-record.json
+{
+    "ChangeInfo": {
+        "Id": "/change/C06296111VAF0XIP9BBNJ",
+        "Status": "PENDING",
+        "SubmittedAt": "2021-07-27T05:35:24.150000+00:00",
+        "Comment": "Update from AWS CLI to V1 APP"
+    }
+}
+```
+ii) Cleanup CFN 
+- [delete-stack.sh](./Cleanup/delete-stack.sh)
+```
+./delete-stack.sh 
 ```
