@@ -60,7 +60,7 @@ curl -k ec2-54-169-186-208.ap-southeast-1.compute.amazonaws.com
 TBU
 
 ## 7. Update CNAME record with AWS CLI & json template
-[Ref-DNS-ChangeRecordSet](https://docs.aws.amazon.com/cli/latest/reference/route53/change-resource-record-sets.html)
+Ref URL : [DNS-ChangeRecordSet](https://docs.aws.amazon.com/cli/latest/reference/route53/change-resource-record-sets.html)
 
 - **CREATE** : Creates a resource record set that has the specified values.
 - **DELETE** : Deletes an existing resource record set that has the specified values.
