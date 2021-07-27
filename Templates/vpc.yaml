@@ -1,0 +1,209 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  VPCCIDR:
+    Description: The IP address range for your new VPC.
+    Type: String
+    # Default: 192.168.0.0/16
+    MinLength: "9"
+    MaxLength: "18"
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  PublicSubnet1CIDR:
+    Description: The IP address range for your new VPC.
+    Type: String
+    # Default: 192.168.1.0/24
+    MinLength: "9"
+    MaxLength: "18"
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  PublicSubnet2CIDR:
+    Description: The IP address range for your new VPC.
+    Type: String
+    # Default: 192.168.2.0/24
+    MinLength: "9"
+    MaxLength: "18"
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  PublicSubnet3CIDR:
+    Description: The IP address range for your new VPC.
+    Type: String
+    # Default: 192.168.3.0/24
+    MinLength: "9"
+    MaxLength: "18"
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  RegionCode:
+    Description: Region Code
+    Type: String
+    AllowedValues:
+      - sgp
+      - syd
+      - tko
+  AZ1Code:
+    Description: AZ1 Code
+    Type: String
+    AllowedValues:
+      - sgpaz1
+      - sydaz1
+      - tkoaz1
+  AZ2Code:
+    Description: AZ2 Code
+    Type: String
+    AllowedValues:
+      - sgpaz2
+      - sydaz2
+      - tkoaz2
+  AZ3Code:
+    Description: AZ3 Code
+    Type: String
+    AllowedValues:
+      - sgpaz3
+      - sydaz3
+      - tkoaz3
+Mappings:
+  RegionMap:
+    sgp:
+      "sgpaz1": "ap-southeast-1a"
+      "sgpaz2": "ap-southeast-1b"
+      "sgpaz3": "ap-southeast-1c"
+    syd:
+      "sydaz1": "ap-southeast-2a"
+      "sydaz2": "ap-southeast-2b"
+      "sydaz3": "ap-southeast-2c"
+    tko:
+      "tkoaz1": "ap-northeast-1a"
+      "tkoaz2": "ap-northeast-1c"
+      "tkoaz3": "ap-northeast-1d"
+Resources:
+  kumoribayMasterVpc1:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCIDR
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: "default"
+      Tags:
+        - Key: "Name"
+          Value: !Join
+            - "-"
+            - - !Ref AWS::Region
+              - "vpc"
+  vpc1publicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      # AvailabilityZone: !Select
+      #   - 0
+      #   - Fn::GetAZs: !Ref "AWS::Region"
+      AvailabilityZone: !FindInMap [RegionMap, !Ref RegionCode, !Ref AZ1Code]
+      CidrBlock: !Ref PublicSubnet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: "Name"
+          Value: !Join
+            - "-"
+            - - "vpc"
+              - !FindInMap [RegionMap, !Ref RegionCode, !Ref AZ1Code]
+              - "subnet"
+      VpcId: !Ref kumoribayMasterVpc1
+  vpc1publicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      # AvailabilityZone: !Select
+      #   - 1
+      #   - Fn::GetAZs: !Ref "AWS::Region"
+      AvailabilityZone: !FindInMap [RegionMap, !Ref RegionCode, !Ref AZ1Code]
+      CidrBlock: !Ref PublicSubnet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: "Name"
+          Value: !Join
+            - "-"
+            - - "vpc"
+              - !FindInMap [RegionMap, !Ref RegionCode, !Ref AZ1Code]
+              - "subnet"
+      VpcId: !Ref kumoribayMasterVpc1
+  vpc1publicSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      # AvailabilityZone: !Select
+      #   - 2
+      #   - Fn::GetAZs: !Ref "AWS::Region"
+      AvailabilityZone: !FindInMap [RegionMap, !Ref RegionCode, !Ref AZ1Code]
+      CidrBlock: !Ref PublicSubnet3CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: "Name"
+          Value: !Join
+            - "-"
+            - - "vpc"
+              - !FindInMap [RegionMap, !Ref RegionCode, !Ref AZ1Code]
+              - "subnet"
+      VpcId: !Ref kumoribayMasterVpc1
+  vpc1routeTableForPublicSubnets: #Create public route table
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "vpc1-route-table-publicSubnets"
+      VpcId: !Ref kumoribayMasterVpc1
+  # Associate publicSubnet1 to RouteTable
+  publicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref vpc1publicSubnet1
+      RouteTableId: !Ref vpc1routeTableForPublicSubnets
+  # Associate publicSubnet1 to RouteTable
+  publicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref vpc1publicSubnet2
+      RouteTableId: !Ref vpc1routeTableForPublicSubnets
+  # Associate publicSubnet1 to RouteTable
+  publicSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref vpc1publicSubnet3
+      RouteTableId: !Ref vpc1routeTableForPublicSubnets
+  vpc1IGW: #internet GW
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "vpc1 igw"
+  attachVPCAndIGW: #associate with VPC and IGW
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref vpc1IGW
+      VpcId: !Ref kumoribayMasterVpc1
+  defaultRouteToIGW: #add default route towards IGW
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref vpc1IGW
+      RouteTableId: !Ref vpc1routeTableForPublicSubnets
+Outputs:
+  gritworksMasterVpc1ID: #logicalID
+    Description: "gritworks Master VPC1 ID"
+    Value: !Ref kumoribayMasterVpc1 # the vaule of export is here
+    Export:
+      Name: !Sub ${AWS::StackName}-VPCID # the name of infra-stack export
+  vpc1publicSubnet1ID: #logicalID
+    Description: "gritworks Master VPC1 publicSubnet1 ID"
+    Value: !Ref vpc1publicSubnet2 # the vaule of export is here
+    Export:
+      Name: !Sub ${AWS::StackName}-publicSubnet1ID # the name of infra-stack export
+  vpc1publicSubnet2ID: #logicalID
+    Description: "gritworks Master VPC publicSubnet2 ID"
+    Value: !Ref vpc1publicSubnet2 # the vaule of export is here
+    Export:
+      Name: !Sub ${AWS::StackName}-publicSubnet2ID # the name of infra-stack export
+  vpc1publicSubnet3ID: #logicalID
+    Description: "gritworks Master VPC publicSubnet3 ID"
+    Value: !Ref vpc1publicSubnet3 # the vaule of export is here
+    Export:
+      Name: !Sub ${AWS::StackName}-publicSubnet3ID # the name of infra-stack export
+  vpc1routeTableForPublicSubnets: #logicalID
+    Description: "gritworks routeTable ID"
+    Value: !Ref vpc1routeTableForPublicSubnets # the vaule of export is here
+    Export:
+      Name: !Sub ${AWS::StackName}-routeTableID # the name of infra-stack export

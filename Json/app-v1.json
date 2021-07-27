@@ -1,0 +1,18 @@
+    {
+        "Comment": "Update from AWS CLI to V1 APP",
+        "Changes": [
+            {
+                "Action": "UPSERT",
+                "ResourceRecordSet": {
+                    "Name": "app.kumoribay.com",
+                    "Type": "CNAME",
+                    "TTL": 0,
+                    "ResourceRecords": [
+                        {
+                            "Value": "ec2-54-169-58-62.ap-southeast-1.compute.amazonaws.com"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
