@@ -115,7 +115,7 @@ Modified output:
 - [app-v1.json](./Json/app-v1.json)<br>
 - [app-v2.json](./Json/app-v2.json)
 
-Change the DNS CNAME Record to V1 App. 
+Change the DNS CNAME Record to V1 App with AWS CLI 
 ```
 aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K --change-batch file://../Json/app-v1.json
 
@@ -128,7 +128,7 @@ aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K -
     }
 }
 ``` 
-Change the DNS CNAME Record to V2 App. 
+Change the DNS CNAME Record to V2 App with AWS CLI
 ```
  aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K --change-batch file://../Json/app-v2.json
 
