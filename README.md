@@ -70,7 +70,7 @@ TBU
 
 Generate existing route53 record-set output and edit. 
 
-'''
+```
 aws route53 change-resource-record-sets --generate-cli-skeleton
 {
     "HostedZoneId": "",
@@ -110,8 +110,45 @@ aws route53 change-resource-record-sets --generate-cli-skeleton
         ]
     }
 }
-'''
+```
 Modified output: 
 -[app-v1.json](./Json/app-v1.json)
 -[app-v2.json](./Json/app-v2.json)
 
+Change the DNS CNAME Record to V1 App. 
+```
+aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K --change-batch file://../Json/app-v1.json
+
+{
+    "ChangeInfo": {
+        "Id": "/change/C092832210HU18H0BR8I1",
+        "Status": "PENDING",
+        "SubmittedAt": "2021-07-27T05:14:51.356000+00:00",
+        "Comment": "Update from AWS CLI to V1 APP"
+    }
+}
+``` 
+Change the DNS CNAME Record to V2 App. 
+```
+ aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K --change-batch file://../Json/app-v2.json
+
+{
+    "ChangeInfo": {
+        "Id": "/change/C00264061Z4N1L1SO8M2K",
+        "Status": "PENDING",
+        "SubmittedAt": "2021-07-27T05:17:36.692000+00:00",
+        "Comment": "Update from AWS CLI to V1 APP"
+    }
+}
+
+Verify Change status: 
+```
+aws route53 get-change --id /change/C00264061Z4N1L1SO8M2K
+{
+    "ChangeInfo": {
+        "Id": "/change/C00264061Z4N1L1SO8M2K",
+        "Status": "INSYNC",
+        "SubmittedAt": "2021-07-27T05:17:36.692000+00:00",
+        "Comment": "Update from AWS CLI to V1 APP"
+    }
+```
