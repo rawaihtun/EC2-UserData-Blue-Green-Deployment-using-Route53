@@ -63,7 +63,7 @@ Configure traffic policy using Traffic Policy Wizzard.
 ![Header Image](outputs-images/Traffic_Policy-1.jpeg)
 
 ### ii) Apply under your domain
-![Header Image](outputs-images/Traffic_Policy-2.jpeg)
+![Header Image](outputs-images/Traffic_Policy-2.png)
 
 ### iii) Test Result 
 ```
@@ -181,7 +181,7 @@ aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K -
 }
 ```
 ii) list your stack  with python script 
-- [list-stack.py](./Cleanup/list-stack.sh)
+- [list-stack.py](./Cleanup/list-stack.py)
 
 ```
 ➜  Python git:(main) ✗ python3 list-stack.py 
