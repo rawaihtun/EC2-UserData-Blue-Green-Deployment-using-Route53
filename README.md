@@ -181,7 +181,7 @@ aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K -
 }
 ```
 ii) list your stack  with python script 
-- [list-stack.sh](./Python/list-stack.sh)
+- [list-stack.sh](./Cleanup/list-stack.sh)
 
 ```
 ➜  Python git:(main) ✗ python3 list-stack.py 
