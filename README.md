@@ -53,11 +53,22 @@ curl -k ec2-54-169-186-208.ap-southeast-1.compute.amazonaws.com
 <html><h1 align='center'><p style='color:blue'>This Is kumoribay - app v2</p></h1></html>
 ```
 
-## 5. Update CNAME record in route53 and point to EC2 web servers
+## 5. Manual Update CNAME record in route53 AWS Console GUI and point to EC2 web servers
 ![Header Image](outputs-images/cname-app1.png)
 
 ## 6. Setup traffic Policies
-TBU
+Configure traffic policy using Traffic Policy Wizzard. 
+
+### i) Define the traffic policy
+![Header Image](outputs-images/Traffic_Policy-1.jpeg)
+
+### ii) Apply under your domain
+![Header Image](outputs-images/Traffic_Policy-2.jpeg)
+
+### iii) Test Result 
+```
+while sleep 0.9; do curl -k "http://app.kumoribay.com"; done
+```
 
 ## 7. Update CNAME record with AWS CLI & json template
 Ref URL : [DNS-ChangeRecordSet](https://docs.aws.amazon.com/cli/latest/reference/route53/change-resource-record-sets.html)
@@ -169,8 +180,20 @@ aws route53 change-resource-record-sets --hosted-zone-id Z054322716IAFQNFTJD4K -
     }
 }
 ```
-ii) Cleanup CFN 
+ii) list your stack  with python script 
+- [list-stack.sh](./Python/list-stack.sh)
+
+```
+➜  Python git:(main) ✗ python3 list-stack.py 
+instancev2
+instancev1
+sgvpc-securitygroup
+sgpvpc
+```
+
+iii) Delete your Stack 
+
 - [delete-stack.sh](./Cleanup/delete-stack.sh)
 ```
-./delete-stack.sh 
+./delete-stack.sh &
 ```
